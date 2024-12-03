@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>My Bookings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Cycle Booking</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/cycles}">Available Cycles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/bookings}">My Bookings</a>
+                    </li>
+                </ul>
+                <form th:action="@{/logout}" method="post" class="d-flex">
+                    <button class="btn btn-outline-light" type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>My Bookings</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Cycle Model</th>
+                        <th>Type</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Duration (Hours)</th>
+                        <th>Rate/Hour</th>
+                        <th>Total Cost</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="booking : ${bookings}">
+                        <td th:text="${booking.cycle.model}">Mountain Bike</td>
+                        <td th:text="${booking.cycle.type}">MTB</td>
+                        <td th:text="${#temporals.format(booking.startTime, 'dd-MM-yyyy HH:mm')}">01-01-2024 10:00</td>
+                        <td th:text="${booking.endTime != null ? #temporals.format(booking.endTime, 'dd-MM-yyyy HH:mm') : 'Active'}">-</td>
+                        <td th:text="${booking.endTime != null ? booking.endTime.getHour() - booking.startTime.getHour() : '-'}">2</td>
+                        <td>₹<span th:text="${booking.cycle.hourlyRate}">10.00</span></td>
+                        <td>₹<span th:text="${booking.totalCost}">20.00</span></td>
+                        <td th:text="${booking.status}">Active</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
